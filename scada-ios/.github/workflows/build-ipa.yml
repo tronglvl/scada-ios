@@ -1,0 +1,36 @@
+# Dựng IPA trên máy ảo macOS của GitHub Actions.
+#
+# Đây là đường lùi chắc chắn khi trong tay không có máy Mac: GitHub cấp sẵn
+# runner macOS đã cài Xcode, chạy miễn phí với repo công khai (repo riêng tư
+# vẫn có hạn mức miễn phí hàng tháng).
+#
+# Chạy: vào tab Actions -> "Build IPA (unsigned)" -> Run workflow.
+# Xong thì tải file trong mục Artifacts.
+name: Build IPA (unsigned)
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cài XcodeGen
+        run: brew install xcodegen
+
+      - name: Dựng IPA
+        run: |
+          chmod +x build-ipa.sh
+          ./build-ipa.sh
+
+      - name: Tải lên artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SCADA-unsigned-ipa
+          path: SCADA-unsigned.ipa
+          if-no-files-found: error
+          retention-days: 30

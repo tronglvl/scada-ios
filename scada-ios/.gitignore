@@ -1,0 +1,15 @@
+# Sinh ra bởi xcodegen, không commit
+Scada.xcodeproj/
+Resources/Info.plist
+
+# Kết quả build
+build/
+Payload/
+*.ipa
+*.xcarchive
+DerivedData/
+
+# macOS / Xcode
+.DS_Store
+xcuserdata/
+*.xcuserstate

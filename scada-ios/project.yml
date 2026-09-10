@@ -1,0 +1,61 @@
+# Đặc tả dự án cho XcodeGen. Sinh Scada.xcodeproj bằng:  xcodegen generate
+#
+# Dùng XcodeGen thay vì commit sẵn .xcodeproj vì file pbxproj là định dạng nhị
+# phân-hoá rất dễ hỏng khi sửa tay; sinh lại từ file yaml này luôn cho kết quả
+# giống nhau và dễ đọc.
+name: Scada
+options:
+  bundleIdPrefix: com.scada
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.9"
+    DEVELOPMENT_LANGUAGE: vi
+
+targets:
+  Scada:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources
+      - path: Resources/Assets.xcassets
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.scada.monitor
+        PRODUCT_NAME: SCADA
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        TARGETED_DEVICE_FAMILY: "1,2"     # iPhone + iPad
+        # Build không ký để bất kỳ máy macOS nào cũng dựng được IPA mà không cần
+        # tài khoản Apple Developer. Ký lại sau bằng Sideloadly/AltStore hoặc CI.
+        CODE_SIGN_IDENTITY: ""
+        CODE_SIGNING_REQUIRED: "NO"
+        CODE_SIGNING_ALLOWED: "NO"
+        CODE_SIGN_ENTITLEMENTS: ""
+    info:
+      path: Resources/Info.plist
+      properties:
+        CFBundleDisplayName: SCADA
+        CFBundleShortVersionString: "1.0"
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UIStatusBarStyle: UIStatusBarStyleLightContent
+        UIViewControllerBasedStatusBarAppearance: false
+        # Máy chủ đang chạy HTTP thuần (http://113.164.79.165:5000). iOS chặn
+        # HTTP không mã hoá theo mặc định nên phải khai báo ngoại lệ ATS, nếu
+        # không mọi lời gọi API đều thất bại ngay từ đầu.
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: true
+        NSLocationWhenInUseUsageDescription: >-
+          Ứng dụng dùng vị trí để hiển thị chỗ bạn đang đứng trên bản đồ trạm cấp nước.
