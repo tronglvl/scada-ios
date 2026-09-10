@@ -14,8 +14,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Kiem tra Xcode
-        run: xcodebuild -version
+      - name: Chon Xcode moi nhat
+        run: |
+          ls -d /Applications/Xcode*.app
+          sudo xcode-select -s "$(ls -d /Applications/Xcode*.app | sort -V | tail -1)"
+          xcodebuild -version
 
       - name: Cai XcodeGen
         run: brew install xcodegen
