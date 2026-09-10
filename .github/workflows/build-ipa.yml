@@ -9,9 +9,13 @@ defaults:
 
 jobs:
   build:
-    runs-on: macos-14
+    runs-on: macos-15
+
     steps:
       - uses: actions/checkout@v4
+
+      - name: Kiem tra Xcode
+        run: xcodebuild -version
 
       - name: Cai XcodeGen
         run: brew install xcodegen
