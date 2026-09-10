@@ -1,0 +1,30 @@
+name: Build IPA (unsigned)
+
+on:
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: scada-ios
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cai XcodeGen
+        run: brew install xcodegen
+
+      - name: Dung IPA
+        run: |
+          chmod +x build-ipa.sh
+          ./build-ipa.sh
+
+      - name: Tai len artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SCADA-unsigned-ipa
+          path: scada-ios/SCADA-unsigned.ipa
+          if-no-files-found: error
+          retention-days: 30
